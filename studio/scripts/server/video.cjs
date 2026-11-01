@@ -85,6 +85,7 @@ module.exports = function createVideo({ ROOT, MODELS, json, readJsonBody, pathIn
     const exe = cliPath();
     const modelName = path.basename(String(body.baseModel || ""));
     const moduleName = path.basename(String(body.motionModule || CATALOG[0].id));
+    if (!CATALOG.some((m) => m.id === moduleName)) throw new Error("Unknown motion module.");
     const modelPath = path.join(MODELS, modelName);
     const modulePath = path.join(VIDEO_MODELS, moduleName);
     const prompt = String(body.prompt || "").trim();
@@ -101,7 +102,9 @@ module.exports = function createVideo({ ROOT, MODELS, json, readJsonBody, pathIn
     const seed = Number(body.seed) >= 0 ? Math.round(Number(body.seed)) : Math.floor(Math.random() * 1e9);
     const negativePrompt = String(body.negativePrompt || "").trim();
 
-    await unloadLarge(); // one large model at a time, as for chat and images
+    job = { active: true, phase: "Unloading other models...", step: 0, steps, error: "", result: null, startedAt: Date.now() }; // lock before the first await
+    try { await unloadLarge(); } // one large model at a time, as for chat and images
+    catch (err) { job = { ...job, active: false, phase: "Failed", error: err.message || String(err) }; throw err; }
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
     const base = `video-${stamp}-${seed}`;
     const videoFile = `${base}.webm`;
@@ -132,13 +135,15 @@ module.exports = function createVideo({ ROOT, MODELS, json, readJsonBody, pathIn
         job.phase = "Decoding frames...";
       }
     };
+    proc.on("error", (err) => { proc = null; job = { ...job, active: false, phase: "Failed", error: err.message }; });
     proc.stdout.on("data", onData);
     proc.stderr.on("data", onData);
     proc.on("exit", (code) => {
       proc = null;
       const videoPath = path.join(VIDEO_OUTPUTS, videoFile);
       if (code !== 0 || !fs.existsSync(videoPath)) {
-        job = { ...job, active: false, phase: "Failed", error: job.error || tail.trim().slice(-800) || `sd-cli exited with code ${code}` };
+        const lastLine = tail.replace(/\x1b\[[0-9;]*[A-Za-z]/g, "").split(/[\r\n]+/).map((l) => l.trim()).filter(Boolean).pop();
+        job = { ...job, active: false, phase: "Failed", error: job.error || lastLine || `sd-cli exited with code ${code}` };
         return;
       }
       const metadata = {
@@ -206,7 +211,10 @@ module.exports = function createVideo({ ROOT, MODELS, json, readJsonBody, pathIn
       return true;
     }
     if (url.startsWith("/video-outputs/") && req.method === "GET") {
-      const name = path.basename(decodeURIComponent(url.slice("/video-outputs/".length)));
+      let decoded;
+      try { decoded = decodeURIComponent(url.slice("/video-outputs/".length)); }
+      catch (_) { json(res, 400, { ok: false, error: "Invalid URL encoding" }); return true; }
+      const name = path.basename(decoded);
       const file = path.join(VIDEO_OUTPUTS, name);
       if (!name || !pathInside(file, VIDEO_OUTPUTS) || !fs.existsSync(file)) { json(res, 404, { ok: false, error: "Video not found" }); return true; }
       const type = name.endsWith(".webm") ? "video/webm" : "application/octet-stream";
