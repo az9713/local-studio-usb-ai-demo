@@ -6131,12 +6131,21 @@ function json(res, code, obj) {
 }
 
 // ── HTTP Server ───────────────────────────────────────────────────────────────
+// Video workspace (AnimateDiff). Added by local-studio-usb-ai-demo, see video.cjs.
+const handleVideo = require("./video.cjs")({
+  ROOT, MODELS, json, readJsonBody, pathInside,
+  getLoaded: () => ({ chat: Boolean(llmProc), image: Boolean(backendProc) }),
+  unloadLarge: async () => { await killLlm(); await killBackend(); },
+});
+
 const server = http.createServer(async (req, res) => {
   // CORS preflight
   if (req.method === "OPTIONS") {
     res.writeHead(204, { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Content-Type", "Access-Control-Allow-Methods": "GET,POST" });
     res.end(); return;
   }
+
+  if (await handleVideo(req, res)) return;
 
   if ((req.url.startsWith("/v1/") || req.url.startsWith("/sdapi/")) && ["GET", "POST"].includes(req.method)) {
     return proxyImageBackendRequest(req, res);

@@ -1,8 +1,8 @@
 # Local AI from a USB drive: a tested setup of Portable Local Studio
 
-This repo shows how to run AI models from one USB drive on a Windows PC. You get a chat assistant, an image maker, speech-to-text and text-to-speech. All of it runs on your own PC, without an account. After setup, chat runs without internet (see [Offline](#9-use-it-offline)).
+This repo shows how to run AI models from one USB drive on a Windows PC. You get a chat assistant, an image maker, speech-to-text, text-to-speech and, new in this repo, short text-to-video clips. All of it runs on your own PC, without an account. After setup, chat runs without internet (see [Offline](#9-use-it-offline)).
 
-The app is **Portable Local Studio** by Tech Jarves. This repo does not contain the app code or the models. It contains a tested setup manual, 15 screenshots, real output files and disk measurements.
+The app is **Portable Local Studio** by Tech Jarves. This repo contains a tested setup manual, 18 screenshots, real output files and disk measurements. It also contains an independent copy of the app in [`studio/`](studio/) with one new feature: a **Video** tab ([section 7.6](#76-make-a-short-video-new-video-tab)). The repo does not contain models.
 
 **Read the full manual (live page):** <https://az9713.github.io/local-studio-usb-ai-demo/local-studio-windows-setup.html>
 
@@ -21,7 +21,7 @@ The app is **Portable Local Studio** by Tech Jarves. This repo does not contain 
 4. [Can text, image and audio models run at the same time?](#4-can-text-image-and-audio-models-run-at-the-same-time)
 5. [Set it up on a USB drive (step by step)](#5-set-it-up-on-a-usb-drive-step-by-step)
 6. [Your first chat](#6-your-first-chat)
-7. [Examples: images, speech, voice and a voice loop](#7-examples-images-speech-voice-and-a-voice-loop)
+7. [Examples: images, speech, voice, a voice loop and video](#7-examples-images-speech-voice-and-a-voice-loop)
 8. [Keep every file on the drive](#8-keep-every-file-on-the-drive)
 9. [Use it offline](#9-use-it-offline)
 10. [Stop the app and remove the drive](#10-stop-the-app-and-remove-the-drive)
@@ -51,7 +51,7 @@ The app is **Portable Local Studio** by Tech Jarves. This repo does not contain 
 
 ## 2. The models we used
 
-We used five models: two for chat, one for images, one for speech-to-text and one for text-to-speech.
+We used six models: two for chat, one for images, one for speech-to-text, one for text-to-speech and one motion module for video.
 
 | Job | Model | File on the drive | Size (bytes) | Runs on | Speed on our laptop |
 |---|---|---|---:|---|---|
@@ -60,7 +60,8 @@ We used five models: two for chat, one for images, one for speech-to-text and on
 | Images | DreamShaper 8 (Stable Diffusion 1.5) | `app\models\DreamShaper_8_pruned.safetensors` | 2,132,625,894 | GPU (CUDA), 2,035 MB VRAM | 512×512, 20 steps: 34.3 s |
 | Speech to text | Whisper Base English | `app\speech-models\ggml-base.en.bin` | 147,964,211 | CPU, 8 threads | 14.4 s memo in 9.2 s; 8.0 s question in 2.0 s |
 | Text to speech | Kokoro 82M ONNX Q8 | `app\tts-runtime\node_modules\@huggingface\transformers\.cache\onnx-community\Kokoro-82M-v1.0-ONNX\onnx\model_quantized.onnx` (+ a 424-byte manifest in `app\tts-models`) | 92,361,116 | CPU | 14.4 s clip ready about 14 s after the click |
-| **Total** | | | **3,981,672,445** | | |
+| Video (new tab) | AnimateDiff v3 motion module, used with DreamShaper 8 | `app\video-models\mm_sd15_v3.safetensors` | 836,618,008 | GPU (CUDA), capped at 2 GiB | 384×384, 8 frames, 20 steps: 152.6 s (GPU free) |
+| **Total** | | | **4,818,290,453** | | |
 
 The engines that run the models come with the app: llama.cpp (chat), stable-diffusion.cpp (images), whisper.cpp (speech-to-text) and kokoro-js on Transformers.js (text-to-speech).
 
@@ -70,7 +71,9 @@ The engines that run the models come with the app: llama.cpp (chat), stable-diff
 
 ## 3. How much of the 128 GB drive it uses
 
-**Largest measured total: 8,096,075,478 bytes (8.10 GB, 7.54 GiB) in 11,021 files.** We measured it after all tests, with all five models and all test outputs on the drive. A 128 GB drive holds about 119.2 GiB, so the studio used about 6.3 % of it. About 111.7 GiB stayed free.
+**With video added: 8,933,067,683 bytes (8.93 GB, 8.32 GiB) in 11,027 files** (measured 1 Nov 2026, 14:17). Video added 836,992,205 bytes: the 836,618,008-byte motion module, 3 test clips and the new code. That is about 7.0 % of a 128 GB drive, so about 110.9 GiB stays free.
+
+The numbers below are from before video: **8,096,075,478 bytes (8.10 GB, 7.54 GiB) in 11,021 files.** We measured it after all tests, with all five models and all test outputs on the drive. A 128 GB drive holds about 119.2 GiB, so the studio used about 6.3 % of it. About 111.7 GiB stayed free.
 
 Before we added the image, speech and voice models, the app with the two chat models used 5,720,534,998 bytes (5.72 GB). The app alone, without models, is about 4.1 GB.
 
@@ -114,6 +117,7 @@ pie title Drive use after all tests (8.10 GB)
 | Two chat models | **No.** Unload the first model, then load the second one. | Error: "… is already loaded as a Text model. Unload it before loading …" TESTED |
 | Chat model + Whisper (speech-to-text) + Kokoro (text-to-speech) | **Yes.** The 1.5B chat model stayed loaded while Whisper and Kokoro worked. | The voice loop in [section 7.4](#74-a-jarvis-voice-loop-all-three-together). TESTED |
 | Image model + Whisper or Kokoro | Not tested. | — |
+| Video + chat or image model | **No. One at a time.** The Video tab asks "Unload the chat model?" first. | Screenshot in [section 7.6](#76-make-a-short-video-new-video-tab). TESTED |
 
 ![Dialog: Unload the chat model? Only one large model can run at a time](screenshots/img-unload.jpeg)
 
@@ -319,6 +323,55 @@ Result: 3 tasks, 38 tokens in 999 ms. **Check the result:** the model added "by 
 
 ![To-do list from the memo](screenshots/notes.jpeg)
 
+### 7.6 Make a short video (new Video tab)
+
+The upstream app has no video feature. Its image engine (stable-diffusion.cpp, release `master-782-b290693`) can make video with `--mode vid_gen` and an AnimateDiff motion module. We added a **Video** page and a **Models → Video** tab that use it. The code is in [`studio/`](studio/): two new files (`scripts/server/video.cjs`, `app/frontend/src/components/VideoGenerator.jsx`) and 27 changed lines in 5 upstream files. Windows only.
+
+**Get the version with the Video tab:**
+
+1. Open <https://github.com/az9713/local-studio-usb-ai-demo>. Click **Code**, then **Download ZIP**.
+2. Extract the ZIP. Copy the `studio` folder to the USB drive.
+3. Run the setup in that folder as in [section 5.3](#53-run-the-first-time-setup).
+
+If you already have the upstream app on the drive, copy these files from `studio\` over it and keep your `app` folder: `scripts\server\serve.cjs`, `scripts\server\video.cjs`, `app\frontend\src\App.jsx`, `app\frontend\src\components\Sidebar.jsx`, `app\frontend\src\components\ModelManager.jsx`, `app\frontend\src\components\VideoGenerator.jsx`. Then delete `app\dist` and start `windows.bat`. Without `app\dist`, `windows.bat` runs setup again, and setup rebuilds the interface (`windows.bat` line 36, `setup.ps1` line 694; FROM CODE). In our test, we rebuilt `app\dist` with `vite build` ourselves, so this route is NOT TESTED.
+
+**Install the motion module:**
+
+1. Click **Models**. Click the **Video** tab.
+2. On **AnimateDiff v3 motion module (SD 1.5)**, click **Download** (837 MB). In our test, it took about 11 s.
+3. Make sure that an SD 1.5 image model is on the drive, for example DreamShaper 8 ([section 7.1](#71-make-a-product-image-dreamshaper-8)).
+
+![Models → Video tab](screenshots/video-models.jpeg)
+
+**Make a clip:**
+
+> [!CAUTION]
+> Video uses the GPU much more than one image. Close other programs that use the GPU (games, video players, other AI apps) before you start. In our test, other programs held about 2.3 GB of the 4 GB VRAM, and a 256×256 clip took 560.2 s. A 384×384 clip took 152.6 s when the GPU was free.
+
+1. In the sidebar, click **Video**.
+2. Type a prompt with motion, for example `ocean waves crashing on rocks at sunset, storm clouds, wind, sea spray, cinematic, high detail`.
+3. Select the size (256×256, 384×384 or 512×512) and the frames (8 or 16).
+4. Click **Make video**.
+5. If the app asks "Unload the chat model?", click **Unload and make video**.
+6. Wait. The page shows the step and the time. Click **Stop** to cancel.
+
+| The unload dialog | Result: 256×256, 8 frames, seed 42 |
+|---|---|
+| ![Unload the chat model before video](screenshots/video-unload.jpeg) | ![Video page with the result](screenshots/video.jpeg) |
+
+**Measured on the RTX 3050 4 GB laptop:**
+
+| Run | Size, frames, steps | Time | File |
+|---|---|---|---|
+| Command line, GPU free | 384×384, 8, 20 | 152.6 s (sampling 145.1 s, decode 6.8 s) | [cli-384x384-8f-seed42.webm](samples/video/cli-384x384-8f-seed42.webm), 201,768 bytes |
+| Video tab, browser and other apps on the GPU | 256×256, 8, 20 | 560.2 s | [video-…-42.webm](samples/video/video-2026-11-01T22-06-44-642Z-42.webm), 124,178 bytes |
+| Command line, 512×512, no VRAM cap | 512×512, 8, 20 | stopped: step 4 took 103.5 s | — |
+| Video tab, 384×384, browser and other apps on the GPU | 384×384, 8, 20 | stopped: still at step 1 after 256 s | — |
+
+After the 512×512 run, the app always passes `--max-vram 2.0 --stream-layers` to the engine. The clips are 1 s long (8 frames at 8 fps), in WebM format. The app saves them to `app\video-outputs` with a JSON file of the settings. AnimateDiff makes short, low-resolution motion, not long videos.
+
+**Fit on a 128 GB drive:** the motion module is 836,618,008 bytes, and it reuses the image model that is already on the drive. A 1 s clip is 124,178–201,768 bytes. The engine also supports larger video models (for example Wan 2.1/2.2 and LTX-Video). They need several GB more on the drive and more than 4 GB of VRAM. We did not test them.
+
 ---
 
 ## 8. Keep every file on the drive
@@ -385,6 +438,7 @@ More fixes: manual [section 19](https://az9713.github.io/local-studio-usb-ai-dem
 - Other languages and **Translate to English**.
 - SDXL models, **Use as base** (image to image), file attachments and web search.
 - Image model and Whisper or Kokoro at the same time.
+- The Video tab on Linux and macOS, with AMD or Intel GPUs, with 16 frames, and at 512×512. Wan and LTX-Video models.
 - macOS and Linux.
 
 ---
@@ -394,11 +448,13 @@ More fixes: manual [section 19](https://az9713.github.io/local-studio-usb-ai-dem
 | Path | Contents |
 |---|---|
 | [`local-studio-windows-setup.html`](https://az9713.github.io/local-studio-usb-ai-demo/local-studio-windows-setup.html) | The full manual (23 sections, 15 screenshots built in). Live page on GitHub Pages. |
-| [`screenshots/`](screenshots/) | The 15 screenshots as JPEG files. |
+| [`screenshots/`](screenshots/) | 18 screenshots as JPEG files (3 of them for Video). |
 | [`samples/images/`](samples/images/) | 2 PNG images and their settings (JSON). |
 | [`samples/voice/`](samples/voice/) | 3 WAV clips and their settings (JSON). |
+| [`samples/video/`](samples/video/) | 2 WebM clips (1 s each) and the settings (JSON) of the Video-tab clip. |
+| [`studio/`](studio/) | Independent copy of the app (upstream MIT) with the Video feature. Commit `d7d2d2e` is the unchanged upstream copy. The next commit adds Video. |
 | [`samples/transcripts/`](samples/transcripts/) | 2 transcripts (TXT) and the full Whisper output (JSON). |
 | [`evidence/storage-measurement.txt`](evidence/storage-measurement.txt) | Disk measurement, per folder and per model, and the check for files outside the drive. |
 | `index.html` | Sends the Pages home address to the manual. |
 
-This repo has no license file of its own. The app belongs to its creator under the MIT License: see [techjarves/Portable-Local-Studio](https://github.com/techjarves/Portable-Local-Studio).
+This repo has no license file of its own. The app in `studio/` belongs to its creator under the MIT License: see [`studio/LICENSE`](studio/LICENSE) and [techjarves/Portable-Local-Studio](https://github.com/techjarves/Portable-Local-Studio). The Video additions are not part of upstream, and we sent no pull request.

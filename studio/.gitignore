@@ -4,6 +4,7 @@ app/openvino-models/
 app/llm-models/
 app/speech-models/
 app/tts-models/
+app/video-models/
 
 # Downloaded portable runtimes/backends
 app/backend/
@@ -21,6 +22,7 @@ app/chat-history/
 app/transcriptions/
 app/tts-outputs/
 app/tts-cache/
+app/video-outputs/
 
 # Dependencies and platform-specific copies
 **/node_modules/

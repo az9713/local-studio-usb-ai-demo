@@ -1,0 +1,21 @@
+{
+  "prompt": "ocean waves crashing on rocks at sunset, storm clouds, wind, sea spray, cinematic, high detail",
+  "negativePrompt": "blurry, low quality, text, watermark, deformed",
+  "baseModel": "DreamShaper_8_pruned.safetensors",
+  "motionModule": "mm_sd15_v3.safetensors",
+  "width": 256,
+  "height": 256,
+  "frames": 8,
+  "fps": 8,
+  "steps": 20,
+  "cfgScale": 8,
+  "seed": 42,
+  "sampler": "euler",
+  "scheduler": "discrete",
+  "durationSec": 560.2,
+  "bytes": 124178,
+  "createdAt": "2026-11-01T22:16:04.834Z",
+  "video": "video-2026-11-01T22-06-44-642Z-42.webm",
+  "metadata": "video-2026-11-01T22-06-44-642Z-42.json",
+  "url": "/video-outputs/video-2026-11-01T22-06-44-642Z-42.webm"
+}

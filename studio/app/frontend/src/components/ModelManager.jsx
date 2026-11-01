@@ -1,6 +1,7 @@
 import React, { memo, useState, useEffect, useCallback } from "react";
 import { FolderOpen, DownloadCloud, Loader2, Trash2, Square, AlertTriangle, Search, X, Link, Link2, HardDrive, Copy, Plus, MoreHorizontal, ExternalLink, Check } from "lucide-react";
 import "../styles/models.css";
+import { VideoModels } from "./VideoGenerator";
 import { 
   listLocalModels, 
   startServer, 
@@ -620,6 +621,8 @@ function ModelManager({
       } else if (activeModelType === "speech") {
         const list = await listSpeechModels();
         setLocalModels(list.filter((model) => model.filename));
+      } else if (activeModelType === "video") {
+        setLocalModels([]); // video cards come from VideoModels
       } else {
         const list = await listTtsModels();
         setLocalModels(list.filter((model) => model.filename));
@@ -1562,6 +1565,7 @@ function ModelManager({
     { id: "text", label: "Text" },
     { id: "speech", label: "Speech" },
     { id: "tts", label: "Voice" },
+    { id: "video", label: "Video" },
   ];
 
   const handleTabKeyDown = (event, index) => {
@@ -1739,6 +1743,9 @@ function ModelManager({
             })}
           </div>
 
+          {activeModelType === "video" ? (
+            <VideoModels active={activeTab === "models"} showConfirm={showConfirm} />
+          ) : (<>
           {/* Add from URL or file, opened from the header */}
           {addPanelVisible && (
             <section id="models-add-panel" className="models-add-panel" aria-label="Add a model">
@@ -2205,6 +2212,7 @@ function ModelManager({
               </button>
             </div>
           )}
+          </>)}
         </div>
       </div>
 
