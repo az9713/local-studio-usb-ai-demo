@@ -1,0 +1,99 @@
+Portable Local Studio - disk measurement of the simulated 128 GB USB drive
+==========================================================================
+
+Test PC     : HP Victus laptop, Intel i5-12450H, 31.7 GB RAM, NVIDIA RTX 3050 Laptop 4 GB VRAM, Windows 11 Home 10.0.26300
+Drive       : "subst U: C:\AI\usb128" makes a folder look like drive U:. The app ran only from U:\Portable-Local-Studio.
+Limit       : audit only. NTFS puts no 128 GB cap on this folder. Real USB speed and exFAT were not tested.
+Method      : PowerShell, Get-ChildItem -Recurse -File -Force, sum of file Length (bytes). 1 GB = 1,000,000,000 bytes.
+
+1. Totals
+---------
+Baseline, app + 2 chat models only (2026-11-01T07:06:09)
+  U:\ files=10998  bytes=5,720,534,998   (5.72 GB)
+
+After all tests: chat, image, speech, voice and their outputs (measured 2026-11-01T08:48:09)
+  U:\ files=11021  bytes=8,096,075,478   (8.10 GB = 7.54 GiB)
+
+This is the largest total measured. A 128 GB drive holds about 119.2 GiB before formatting overhead,
+so the studio used about 6.3 % of it, and about 111.7 GiB stayed free.
+
+2. Per folder (measured 2026-11-01T08:48:09)
+--------------------------------------------
+folder              files      bytes
+------              -----      -----
+app\models              1 2132625894    image model (DreamShaper 8)
+app\llm-backend       234 1801611060    chat engines (llama.cpp)
+app\llm-models          2 1608720800    chat models (.gguf)
+app\backend            46 1377717831    image engines (stable-diffusion.cpp)
+app\tts-runtime      2539  517052337    voice runtime (Node.js packages) + Kokoro model 92,361,116
+app\tools            2857  309832151    portable Node.js + npm cache
+app\frontend         5163  172387299    interface source + packages
+app\speech-models       1  147964211    Whisper Base English
+app\speech-backend     37   20355072    speech engine (whisper.cpp)
+app\dist               74    3860202    built interface
+app\tts-outputs         6    1487248    voice clips (WAV + JSON)
+app\outputs             4    1091391    images (PNG + JSON)
+app\chat-history        6       5783    saved chats
+app\transcriptions      4       4431    transcripts (TXT + JSON)
+app\config              1        967    per-model settings
+app\tts-models          1        424    Kokoro manifest
+app\openvino-models     0          0
+app\cache               0          0
+app\tts-cache           0          0
+assets\                 4      48620
+docs\                   5     772787
+scripts\               29     488830
+root files (README.md, LICENSE, windows.bat, mac.sh, linux.sh, .gitignore, .gitattributes)   48,140
+
+3. Engine variants (setup downloads all of them)
+------------------------------------------------
+app\llm-backend\win\cuda      1,193,840,421
+app\llm-backend\win\sycl        463,495,109
+app\llm-backend\win\vulkan       94,790,437
+app\llm-backend\win\cpu          49,485,093
+app\backend\win\cuda          1,202,495,519
+app\backend\win\vulkan          112,640,532
+app\backend\win\cpu              62,581,780
+app\speech-backend\win\cpu       20,355,072
+app\speech-backend\win\vulkan             0
+app\tools\node-win               96,152,529
+app\tools\npm-cache             213,679,622   (only because setup ran with npm_config_cache inside the app)
+
+4. Model files
+--------------
+app\llm-models\qwen2.5-coder-0.5b-instruct-q4_k_m.gguf                     491,400,064
+app\llm-models\qwen2.5-1.5b-instruct-q4_k_m.gguf                         1,117,320,736
+app\models\DreamShaper_8_pruned.safetensors                              2,132,625,894
+app\speech-models\ggml-base.en.bin                                         147,964,211
+app\tts-models\kokoro-onnx-q8.json                                                 424
+app\tts-runtime\node_modules\@huggingface\transformers\.cache\
+  onnx-community\Kokoro-82M-v1.0-ONNX\onnx\model_quantized.onnx               92,361,116
+                                                                  sum    3,981,672,445
+
+5. Grouped
+----------
+Models                                     3,981,672,445   49.2 %
+Engines (llm-backend, backend,
+  speech-backend, tts-runtime minus model) 3,624,375,184   44.8 %
+Node.js, npm cache, interface              486,079,652    6.0 %
+Your outputs, chats, settings                2,589,820    0.03 %
+Project files (scripts, docs, assets)        1,358,377    0.02 %
+                                   total   8,096,075,478  100 %
+
+6. Check for files written outside the drive
+--------------------------------------------
+Start marker: 2026-11-01T07:09:15 (before the image, speech and voice tests).
+After the tests, we listed every file larger than 100 KB that changed after the marker in:
+  %USERPROFILE%\.cache
+  %LOCALAPPDATA%\npm-cache
+  %APPDATA%\NVIDIA\ComputeCache
+  %LOCALAPPDATA%\NVIDIA\DXCache and GLCache
+  %TEMP%
+  %USERPROFILE%\Downloads
+Result:
+  - No studio model, cache or output was outside U:.
+  - The Hugging Face cache, the npm cache and the NVIDIA ComputeCache did not change.
+  - The only writes were the test browser's own profile and the NVIDIA DXCache (browser GPU shader cache).
+Two ways to put files on C: anyway:
+  - The first setup uses %LOCALAPPDATA%\npm-cache unless you run "set npm_config_cache=%CD%\app\tools\npm-cache" first.
+  - The Download / TXT / JSON / Download WAV buttons in the browser save a copy to your Downloads folder on C:.

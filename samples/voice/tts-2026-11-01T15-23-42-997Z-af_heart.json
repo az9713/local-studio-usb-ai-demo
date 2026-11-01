@@ -1,0 +1,26 @@
+{
+  "text": "Reduce the brightness of your screen and lower background apps. Turn off or hibernate unnecessary devices when not in use.",
+  "model": "kokoro-onnx-q8.json",
+  "modelName": "Kokoro 82M ONNX Q8",
+  "voice": "af_heart",
+  "voiceName": "Heart",
+  "speed": 1,
+  "durationMs": 8520,
+  "sampleRate": 24000,
+  "createdAt": "2026-11-01T15:23:42.997Z",
+  "audioFile": "tts-2026-11-01T15-23-42-997Z-af_heart.wav",
+  "metadata": "tts-2026-11-01T15-23-42-997Z-af_heart.json",
+  "displayName": "Heart - Reduce the brightness of your screen and",
+  "segments": [
+    {
+      "text": "Reduce the brightness of your screen and lower background apps.",
+      "start": 0,
+      "end": 3.95
+    },
+    {
+      "text": "Turn off or hibernate unnecessary devices when not in use.",
+      "start": 4.07,
+      "end": 8.52
+    }
+  ]
+}

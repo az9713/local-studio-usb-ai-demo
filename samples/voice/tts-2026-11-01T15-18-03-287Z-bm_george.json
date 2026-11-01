@@ -1,0 +1,26 @@
+{
+  "text": "What are three simple ways to make a laptop battery last longer? Answer in two short sentences.",
+  "model": "kokoro-onnx-q8.json",
+  "modelName": "Kokoro 82M ONNX Q8",
+  "voice": "bm_george",
+  "voiceName": "George",
+  "speed": 1,
+  "durationMs": 8020,
+  "sampleRate": 24000,
+  "createdAt": "2026-11-01T15:18:03.287Z",
+  "audioFile": "tts-2026-11-01T15-18-03-287Z-bm_george.wav",
+  "metadata": "tts-2026-11-01T15-18-03-287Z-bm_george.json",
+  "displayName": "George - What are three simple ways to make a lap",
+  "segments": [
+    {
+      "text": "What are three simple ways to make a laptop battery last longer?",
+      "start": 0,
+      "end": 4.925
+    },
+    {
+      "text": "Answer in two short sentences.",
+      "start": 5.045,
+      "end": 8.02
+    }
+  ]
+}

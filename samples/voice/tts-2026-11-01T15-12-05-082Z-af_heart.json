@@ -1,0 +1,36 @@
+{
+  "text": "Voice memo for Monday. Call the print shop about the two hundred flyers, they are due on Thursday. Ask Dana for the budget sheet before noon. The team meeting moves to three p.m. on Wednesday.",
+  "model": "kokoro-onnx-q8.json",
+  "modelName": "Kokoro 82M ONNX Q8",
+  "voice": "af_heart",
+  "voiceName": "Heart",
+  "speed": 1,
+  "durationMs": 14385,
+  "sampleRate": 24000,
+  "createdAt": "2026-11-01T15:12:05.082Z",
+  "audioFile": "tts-2026-11-01T15-12-05-082Z-af_heart.wav",
+  "metadata": "tts-2026-11-01T15-12-05-082Z-af_heart.json",
+  "displayName": "Heart - Voice memo for Monday. Call the print sh",
+  "segments": [
+    {
+      "text": "Voice memo for Monday. Call the print shop about the two hundred flyers, they are due on Thursday.",
+      "start": 0,
+      "end": 6.375
+    },
+    {
+      "text": "Ask Dana for the budget sheet before noon.",
+      "start": 6.495,
+      "end": 9.545
+    },
+    {
+      "text": "The team meeting moves to three p.",
+      "start": 9.665,
+      "end": 12.24
+    },
+    {
+      "text": "m. on Wednesday.",
+      "start": 12.36,
+      "end": 14.385
+    }
+  ]
+}

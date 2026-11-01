@@ -1,0 +1,78 @@
+{
+  "text": "Voice memo for Monday. Call the print shop about the 200 flyers they are due on Thursday.\r\n Ask Dana for the budget sheet before noon. The team meeting moves to 3P.\r\n M. on Wednesday.",
+  "model": "ggml-base.en.bin",
+  "modelName": "Whisper Base English",
+  "language": "auto",
+  "backend": "cpu",
+  "backendMode": "whisper.cpp CPU",
+  "sourceFilename": "tts-2026-11-01T15-12-05-082Z-af_heart.wav",
+  "durationMs": 6485,
+  "raw": {
+    "systeminfo": "WHISPER : COREML = 0 | OPENVINO = 0 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX_VNNI = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | OPENMP = 1 | REPACK = 1 | ",
+    "model": {
+      "type": "base",
+      "multilingual": false,
+      "vocab": 51864,
+      "audio": {
+        "ctx": 1500,
+        "state": 512,
+        "head": 8,
+        "layer": 6
+      },
+      "text": {
+        "ctx": 448,
+        "state": 512,
+        "head": 8,
+        "layer": 6
+      },
+      "mels": 80,
+      "ftype": 1
+    },
+    "params": {
+      "model": "U:\\Portable-Local-Studio\\app\\speech-models\\ggml-base.en.bin",
+      "language": "en",
+      "translate": false
+    },
+    "result": {
+      "language": "en"
+    },
+    "transcription": [
+      {
+        "timestamps": {
+          "from": "00:00:00,000",
+          "to": "00:00:06,000"
+        },
+        "offsets": {
+          "from": 0,
+          "to": 6000
+        },
+        "text": " Voice memo for Monday. Call the print shop about the 200 flyers they are due on Thursday."
+      },
+      {
+        "timestamps": {
+          "from": "00:00:06,000",
+          "to": "00:00:12,000"
+        },
+        "offsets": {
+          "from": 6000,
+          "to": 12000
+        },
+        "text": " Ask Dana for the budget sheet before noon. The team meeting moves to 3P."
+      },
+      {
+        "timestamps": {
+          "from": "00:00:12,000",
+          "to": "00:00:14,000"
+        },
+        "offsets": {
+          "from": 12000,
+          "to": 14000
+        },
+        "text": " M. on Wednesday."
+      }
+    ]
+  },
+  "createdAt": "2026-11-01T15:21:58.654Z",
+  "textFile": "transcript-2026-11-01T15-21-58-654Z-tts-2026-11-01T15-12-05-082Z-af_heart.wav.txt",
+  "metadata": "transcript-2026-11-01T15-21-58-654Z-tts-2026-11-01T15-12-05-082Z-af_heart.wav.json"
+}

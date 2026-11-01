@@ -1,0 +1,18 @@
+{
+  "prompt": "product illustration of a matte black reusable water bottle on a light wooden table, soft studio lighting, clean background, high detail",
+  "negativePrompt": "blurry, low quality, text, watermark, deformed",
+  "seed": 771147,
+  "steps": 20,
+  "cfgScale": 7,
+  "width": 512,
+  "height": 512,
+  "sampler": "euler_a",
+  "model": "DreamShaper_8_pruned.safetensors",
+  "mode": "txt2img",
+  "denoisingStrength": null,
+  "duration_sec": 34.3,
+  "timestamp": "7:27:05 AM",
+  "createdAt": "2026-11-01T15:27:05.777Z",
+  "image": "output-2026-11-01T15-27-05-777Z-771147.png",
+  "metadata": "output-2026-11-01T15-27-05-777Z-771147.json"
+}

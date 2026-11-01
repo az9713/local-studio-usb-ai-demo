@@ -1,0 +1,67 @@
+{
+  "text": "What are three simple ways to make a laptop battery last longer?\r\n Answer in two short sentences.",
+  "model": "ggml-base.en.bin",
+  "modelName": "Whisper Base English",
+  "language": "auto",
+  "backend": "cpu",
+  "backendMode": "whisper.cpp CPU",
+  "sourceFilename": "tts-2026-11-01T15-18-03-287Z-bm_george.wav",
+  "durationMs": 1916,
+  "raw": {
+    "systeminfo": "WHISPER : COREML = 0 | OPENVINO = 0 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX_VNNI = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | OPENMP = 1 | REPACK = 1 | ",
+    "model": {
+      "type": "base",
+      "multilingual": false,
+      "vocab": 51864,
+      "audio": {
+        "ctx": 1500,
+        "state": 512,
+        "head": 8,
+        "layer": 6
+      },
+      "text": {
+        "ctx": 448,
+        "state": 512,
+        "head": 8,
+        "layer": 6
+      },
+      "mels": 80,
+      "ftype": 1
+    },
+    "params": {
+      "model": "U:\\Portable-Local-Studio\\app\\speech-models\\ggml-base.en.bin",
+      "language": "en",
+      "translate": false
+    },
+    "result": {
+      "language": "en"
+    },
+    "transcription": [
+      {
+        "timestamps": {
+          "from": "00:00:00,000",
+          "to": "00:00:04,760"
+        },
+        "offsets": {
+          "from": 0,
+          "to": 4760
+        },
+        "text": " What are three simple ways to make a laptop battery last longer?"
+      },
+      {
+        "timestamps": {
+          "from": "00:00:04,760",
+          "to": "00:00:07,840"
+        },
+        "offsets": {
+          "from": 4760,
+          "to": 7840
+        },
+        "text": " Answer in two short sentences."
+      }
+    ]
+  },
+  "createdAt": "2026-11-01T15:22:31.601Z",
+  "textFile": "transcript-2026-11-01T15-22-31-601Z-tts-2026-11-01T15-18-03-287Z-bm_george.wav.txt",
+  "metadata": "transcript-2026-11-01T15-22-31-601Z-tts-2026-11-01T15-18-03-287Z-bm_george.wav.json"
+}

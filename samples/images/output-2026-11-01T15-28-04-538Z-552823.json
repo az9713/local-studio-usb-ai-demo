@@ -1,0 +1,18 @@
+{
+  "prompt": "wide blog header, cozy home office desk with a laptop and a cup of coffee at sunrise, warm light, plants, shallow depth of field, digital painting",
+  "negativePrompt": "blurry, low quality, text, watermark, deformed",
+  "seed": 552823,
+  "steps": 20,
+  "cfgScale": 7,
+  "width": 768,
+  "height": 432,
+  "sampler": "euler_a",
+  "model": "DreamShaper_8_pruned.safetensors",
+  "mode": "txt2img",
+  "denoisingStrength": null,
+  "duration_sec": 29,
+  "timestamp": "7:28:04 AM",
+  "createdAt": "2026-11-01T15:28:04.538Z",
+  "image": "output-2026-11-01T15-28-04-538Z-552823.png",
+  "metadata": "output-2026-11-01T15-28-04-538Z-552823.json"
+}
