@@ -6132,6 +6132,7 @@ function json(res, code, obj) {
 
 // ── HTTP Server ───────────────────────────────────────────────────────────────
 // Video workspace (AnimateDiff). Added by local-studio-usb-ai-demo, see video.cjs.
+const { isAllowedRequest } = require("./origin-check.cjs");
 const handleVideo = require("./video.cjs")({
   ROOT, MODELS, json, readJsonBody, pathInside,
   getLoaded: () => ({ chat: Boolean(llmProc), image: Boolean(backendProc) }),
@@ -6139,6 +6140,11 @@ const handleVideo = require("./video.cjs")({
 });
 
 const server = http.createServer(async (req, res) => {
+  // Added by local-studio-usb-ai-demo: refuse requests from other web pages.
+  if (!isAllowedRequest(req.headers, Boolean(process.env.UAIS_HOST))) {
+    return json(res, 403, { ok: false, error: "Request from another address refused" });
+  }
+
   // CORS preflight
   if (req.method === "OPTIONS") {
     res.writeHead(204, { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Content-Type", "Access-Control-Allow-Methods": "GET,POST" });

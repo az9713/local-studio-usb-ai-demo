@@ -45,7 +45,7 @@ The app is **Portable Local Studio** by Tech Jarves. This repo contains a tested
 **Our test PC:** HP Victus laptop, Intel i5-12450H, 31.7 GB RAM, NVIDIA RTX 3050 Laptop GPU with 4 GB of video memory (VRAM), Windows 11 Home. Tested 31 Oct – 1 Nov 2026.
 
 > [!IMPORTANT]
-> **How we simulated the USB drive.** Our laptop had no USB drive connected. We copied the app to `C:\AI\usb128` and ran `subst U: C:\AI\usb128`. Windows then showed that folder as drive `U:`, and the app ran only from `U:\`. This proves the app works from any drive letter. It does not test real USB speed or the exFAT file system. The 128 GB limit was audit only: we measured the folder, but nothing stopped it from growing past 128 GB.
+> **How we simulated the USB drive.** Our laptop had no USB drive connected. We copied the app to `C:\AI\usb128` and ran `subst U: C:\AI\usb128`. Windows then showed that folder as drive `U:`, and the app ran only from `U:\`. We did not test a different drive letter, USB speed or the exFAT file system. The 128 GB limit was audit only: we measured the folder, but nothing stopped it from growing past 128 GB.
 
 ---
 
@@ -333,7 +333,7 @@ The upstream app has no video feature. Its image engine (stable-diffusion.cpp, r
 2. Extract the ZIP. Copy the `studio` folder to the USB drive.
 3. Run the setup in that folder as in [section 5.3](#53-run-the-first-time-setup).
 
-If you already have the upstream app on the drive, copy these files from `studio\` over it and keep your `app` folder: `scripts\server\serve.cjs`, `scripts\server\video.cjs`, `app\frontend\src\App.jsx`, `app\frontend\src\components\Sidebar.jsx`, `app\frontend\src\components\ModelManager.jsx`, `app\frontend\src\components\VideoGenerator.jsx`. Then delete `app\dist` and start `windows.bat`. Without `app\dist`, `windows.bat` runs setup again, and setup rebuilds the interface (`windows.bat` line 36, `setup.ps1` line 694; FROM CODE). In our test, we rebuilt `app\dist` with `vite build` ourselves, so this route is NOT TESTED.
+If you already have the upstream app on the drive, copy these files from `studio\` over it and keep your `app` folder: `scripts\server\serve.cjs`, `scripts\server\video.cjs`, `scripts\server\origin-check.cjs`, `app\frontend\src\App.jsx`, `app\frontend\src\components\Sidebar.jsx`, `app\frontend\src\components\ModelManager.jsx`, `app\frontend\src\components\VideoGenerator.jsx`. Then delete `app\dist` and start `windows.bat`. Without `app\dist`, `windows.bat` runs setup again, and setup rebuilds the interface (`windows.bat` line 36, `setup.ps1` line 694; FROM CODE). In our test, we rebuilt `app\dist` with `vite build` ourselves, so this route is NOT TESTED.
 
 **Install the motion module:**
 

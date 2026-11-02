@@ -250,3 +250,22 @@ test("launchers update a stale llama.cpp backend so existing installs get backen
   assert.match(read("scripts/setup/setup-llama.sh"), /^RELEASE="\$\{LLAMA_RELEASE:-b\d+\}"$/m);
   assert.match(read("scripts/setup/setup-llama.ps1"), /param\(\[string\]\$Release = "b\d+"\)/);
 });
+
+test("the server refuses requests from other web pages", () => {
+  const { isAllowedRequest: ok } = require("../server/origin-check.cjs");
+  const own = "localhost:1420";
+  assert.equal(ok({ host: own }), true); // launcher, curl
+  assert.equal(ok({ host: own, origin: "http://localhost:1420" }), true);
+  assert.equal(ok({ host: "127.0.0.1:1421", origin: "http://127.0.0.1:1421" }), true);
+  assert.equal(ok({ host: "[::1]:1420", origin: "http://[::1]:1420" }), true);
+  assert.equal(ok({ host: own, origin: "https://evil.example" }), false);
+  assert.equal(ok({ host: own, origin: "http://localhost:3000" }), false); // another local app
+  assert.equal(ok({ host: own, origin: "null" }), false); // sandboxed frame, file page
+  assert.equal(ok({ host: "evil.example:1420" }), false); // DNS rebinding
+  assert.equal(ok({ host: "evil.example:1420", origin: "http://evil.example:1420" }), false);
+  assert.equal(ok({ host: "localhost@evil.example" }), false);
+  assert.equal(ok({}), false);
+  // UAIS_HOST set: the studio's network address is valid, other pages stay refused
+  assert.equal(ok({ host: "192.168.1.5:1420", origin: "http://192.168.1.5:1420" }, true), true);
+  assert.equal(ok({ host: "192.168.1.5:1420", origin: "https://evil.example" }, true), false);
+});
