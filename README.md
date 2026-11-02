@@ -368,6 +368,14 @@ If you already have the upstream app on the drive, copy these files from `studio
 | Command line, 512×512, no VRAM cap | 512×512, 8, 20 | stopped: step 4 took 103.5 s | — |
 | Video tab, 384×384, browser and other apps on the GPU | 384×384, 8, 20 | stopped: still at step 1 after 256 s | — |
 
+**The 2 clips from the table (they loop):**
+
+| Command line, 384×384 | Video tab, 256×256 |
+|---|---|
+| ![Clip from the command line, 384×384, 8 frames](samples/video/cli-384x384-8f-seed42.gif) | ![Clip from the Video tab, 256×256, 8 frames](samples/video/video-2026-11-01T22-06-44-642Z-42.gif) |
+
+These GIF files are copies of the WebM clips, because GitHub does not play a video file from the repo in a README. A GIF has a maximum of 256 colors, so the colors can show bands. To play the original clips with player controls, open [section 24 of the manual](https://az9713.github.io/local-studio-usb-ai-demo/local-studio-windows-setup.html#video).
+
 After the 512×512 run, the app always passes `--max-vram 2.0 --stream-layers` to the engine. The clips are 1 s long (8 frames at 8 fps), in WebM format. The app saves them to `app\video-outputs` with a JSON file of the settings. AnimateDiff makes short, low-resolution motion, not long videos.
 
 **Fit on a 128 GB drive:** the motion module is 836,618,008 bytes, and it reuses the image model that is already on the drive. A 1 s clip is 124,178–201,768 bytes. The engine also supports larger video models (for example Wan 2.1/2.2 and LTX-Video). They need several GB more on the drive and more than 4 GB of VRAM. We did not test them.
@@ -451,7 +459,7 @@ More fixes: manual [section 19](https://az9713.github.io/local-studio-usb-ai-dem
 | [`screenshots/`](screenshots/) | 18 screenshots as JPEG files (3 of them for Video). |
 | [`samples/images/`](samples/images/) | 2 PNG images and their settings (JSON). |
 | [`samples/voice/`](samples/voice/) | 3 WAV clips and their settings (JSON). |
-| [`samples/video/`](samples/video/) | 2 WebM clips (1 s each) and the settings (JSON) of the Video-tab clip. |
+| [`samples/video/`](samples/video/) | 2 WebM clips (1 s each), a GIF copy of each clip and the settings (JSON) of the Video-tab clip. |
 | [`studio/`](studio/) | Independent copy of the app (upstream MIT) with the Video feature. Commit `d7d2d2e` is the unchanged upstream copy. The next commit adds Video. |
 | [`samples/transcripts/`](samples/transcripts/) | 2 transcripts (TXT) and the full Whisper output (JSON). |
 | [`evidence/storage-measurement.txt`](evidence/storage-measurement.txt) | Disk measurement, per folder and per model, and the check for files outside the drive. |

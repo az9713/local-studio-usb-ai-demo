@@ -17,7 +17,7 @@ If the session starts in the parent folder `usb_local_ai_jarvis`, this file is a
   - New: `studio/scripts/server/video.cjs` (`/api/video/*`, spawns the first `sd-cli.exe` found in `app\backend\win\{cuda,vulkan,cpu}` with `-M vid_gen`) and `studio/app/frontend/src/components/VideoGenerator.jsx` (Video page and the `VideoModels` card).
   - Small edits: `serve.cjs` (+9 lines), `App.jsx`, `Sidebar.jsx`, `ModelManager.jsx`, `.gitignore`.
   - Motion module: `mm_sd15_v3.safetensors`, 836,618,008 bytes, from huggingface.co/conrevo/AnimateDiff-A1111.
-  - README section 7.6 has the steps and the measured times.
+  - README section 7.6 has the steps, the measured times and 2 GIF copies of the clips (`samples/video/*.gif`, 824,520 and 411,107 bytes, made from the WebM files with `ffmpeg`).
 - Manual: `local-studio-windows-setup.html` has 24 sections. Section 24 (`#video`) has the Video steps, the results, 2 embedded clips and the code changes. Step 16 has the parts `#where-models`, `#self-contained` and `#another-laptop`. Two copies exist, byte-identical on 1 Nov (SHA-256 `68a3e3b7…`, about 2.32 MB): this repo, and the parent folder `usb_local_ai_jarvis`.
 - Private artifact: https://claude.ai/artifact/2QZVQufnXuqSqFS2v6Es9Z, slug `0b634499-197d-40a6-9d3d-a717c8160130`, live version `1793598878-dd55`, read mode `owner`. It holds the same manual.
 - Test install: `C:\AI\usb128\Portable-Local-Studio` (about 8.93 GB). It holds the Video edits, the request check of `52b268d` and a rebuilt `app\dist`. Originals: `C:\AI\*.orig` and `C:\AI\dist.orig`.
