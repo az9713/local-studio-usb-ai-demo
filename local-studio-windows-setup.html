@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Portable Local Studio on Windows — Setup, Chat, Images, Speech and Voice</title>
+<title>Portable Local Studio on Windows — Setup, Chat, Images, Speech, Voice and Video</title>
 <style>
   :root{--bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--text2:#cbd5e1;--muted:#94a3b8;--orange:#fb923c;--teal:#2dd4bf;--b1:#1e293b;--b2:#334155;--red:#f87171;--amber:#fbbf24}
   *{box-sizing:border-box}
@@ -57,7 +57,7 @@
 <div class="wrap">
 
 <header>
-  <h1>Portable Local Studio on Windows: setup, chat, images, speech and voice</h1>
+  <h1>Portable Local Studio on Windows: setup, chat, images, speech, voice and video</h1>
   <p>This manual sets up Portable Local Studio on a Windows PC. The app runs AI models on your own computer, from a normal folder or a USB drive. At the end, you chat with a local model, make images, transcribe speech and make speech from text. All of it runs in the browser at <code>http://localhost:1420</code>, and all files stay in one folder on a 128 GB drive.</p>
   <p>Each step comes from a real installation. Each claim has a tag that tells you how it was checked.</p>
   <p class="meta">Tested 31 Oct – 1 Nov 2026 · HP Victus 15-fa0xxx · Windows 11 Home 10.0.26300 (64-bit) · Intel Core i5-12450H (8 cores, 12 threads) · 31.7 GB RAM · NVIDIA GeForce RTX 3050 Laptop GPU, 4 GB VRAM, driver 592.82</p>
@@ -605,7 +605,8 @@ Do not add any other information.</code></pre>
   <tr><td>Exit code <code>3221225501</code> (<code>0xC000001D</code>) <span class="tag t-code">FROM CODE</span></td><td>An old engine build uses CPU instructions that your CPU does not have.</td><td>Run setup again (repair command below) to get the current builds.</td></tr>
   <tr><td>Windows SmartScreen or antivirus blocks a file <span class="tag t-no">NOT TESTED</span></td><td>The file came from the internet.</td><td>Check where the file came from and what it is. Allow only that file. Do not switch off your antivirus. Do not change the PowerShell execution policy for the whole system. The launcher already sets it for its own process.</td></tr>
   <tr><td>The GPU is not used</td><td>Wrong backend, or GPU layers set to 0.</td><td>Check <b>Models → Text</b>. The card must say "Running on Auto (CUDA/CPU)" or a Vulkan backend. Set <b>GPU layers</b> to All. On NVIDIA, run <code>nvidia-smi</code> and look for <code>llama-server.exe</code> in the process list.</td></tr>
-  <tr><td>Another device on your network cannot open the studio</td><td>By design, the app answers only on <code>127.0.0.1</code> (<code>serve.cjs:7707</code>), and it has no login.</td><td>Leave this default. If you run <code>set UAIS_HOST=0.0.0.0</code>, any person on that network can use your studio.</td></tr>
+  <tr><td>Another device on your network cannot open the studio</td><td>By design, the app answers only on <code>127.0.0.1</code> (<code>serve.cjs:7722</code>), and it has no login.</td><td>Leave this default. If you run <code>set UAIS_HOST=0.0.0.0</code>, any person on that network can use your studio.</td></tr>
+  <tr><td>The studio shows <i>Request from another address refused</i>, or an API request returns 403</td><td>The address in the browser is not <code>localhost</code>, <code>127.0.0.1</code> or <code>[::1]</code>, or the request came from another web page. The server refuses these requests (<code>origin-check.cjs</code>).</td><td>Open the address that the launcher shows, for example <code>http://localhost:1420</code>.</td></tr>
 </table>
 
 <h3>Fix for the npm ENOENT error</h3>
@@ -688,7 +689,7 @@ $msg = @{ stream = $false; temperature = 0; max_tokens = 60; messages = @(@{ rol
   <tr><td>Visual C++ runtime install (admin prompt)</td><td><code>setup.ps1:213-239</code></td></tr>
   <tr><td>Potato tier with KV q4_0</td><td><code>serve.cjs:1463-1476</code></td></tr>
   <tr><td>"Safe" fallback load profile (CPU, flash attention off, q4_0)</td><td><code>serve.cjs:4272-4293</code> (<code>buildLlmLoadProfiles</code>)</td></tr>
-  <tr><td>Local-only binding</td><td><code>serve.cjs:7707</code> (interface), <code>serve.cjs:4565</code> (llama-server)</td></tr>
+  <tr><td>Local-only binding</td><td><code>serve.cjs:7722</code> (interface), <code>serve.cjs:4565</code> (llama-server)</td></tr>
   <tr><td>Workspace routes (#/images, #/transcribe, #/voice)</td><td><code>App.jsx:15-22</code></td></tr>
   <tr><td>Image model library</td><td><code>ModelManager.jsx:119-188</code></td></tr>
   <tr><td>Whisper and Kokoro catalogs, voices</td><td><code>serve.cjs:171-215</code></td></tr>
@@ -709,7 +710,7 @@ $msg = @{ stream = $false; temperature = 0; max_tokens = 60; messages = @(@{ rol
   <li>Extract the ZIP. Copy the <code>studio</code> folder to the USB drive.</li>
   <li>Run the setup in that folder as in Step 5.</li>
 </ol>
-<p>If you already have the upstream app on the drive, copy these 6 files from <code>studio\</code> over it and keep your <code>app</code> folder: <code>scripts\server\serve.cjs</code>, <code>scripts\server\video.cjs</code>, <code>app\frontend\src\App.jsx</code>, <code>app\frontend\src\components\Sidebar.jsx</code>, <code>app\frontend\src\components\ModelManager.jsx</code> and <code>app\frontend\src\components\VideoGenerator.jsx</code>. Then delete <code>app\dist</code> and start <code>windows.bat</code>. Without <code>app\dist</code>, <code>windows.bat</code> runs setup again, and setup rebuilds the interface (<code>windows.bat</code> line 36, <code>setup.ps1</code> line 694). In our test, we rebuilt <code>app\dist</code> with <code>vite build</code> ourselves, so we did not run this route. <span class="tag t-code">FROM CODE</span> <span class="tag t-no">NOT TESTED</span></p>
+<p>If you already have the upstream app on the drive, copy these 7 files from <code>studio\</code> over it and keep your <code>app</code> folder: <code>scripts\server\serve.cjs</code>, <code>scripts\server\video.cjs</code>, <code>scripts\server\origin-check.cjs</code>, <code>app\frontend\src\App.jsx</code>, <code>app\frontend\src\components\Sidebar.jsx</code>, <code>app\frontend\src\components\ModelManager.jsx</code> and <code>app\frontend\src\components\VideoGenerator.jsx</code>. Then delete <code>app\dist</code> and start <code>windows.bat</code>. Without <code>app\dist</code>, <code>windows.bat</code> runs setup again, and setup rebuilds the interface (<code>windows.bat</code> line 36, <code>setup.ps1</code> line 694). In our test, we rebuilt <code>app\dist</code> with <code>vite build</code> ourselves, so we did not run this route. <span class="tag t-code">FROM CODE</span> <span class="tag t-no">NOT TESTED</span></p>
 
 <h3>Install the motion module</h3>
 <ol class="steps">
@@ -748,7 +749,7 @@ $msg = @{ stream = $false; temperature = 0; max_tokens = 60; messages = @(@{ rol
 <p><b>Fit on a 128 GB drive:</b> the motion module is 836,618,008 bytes, and it reuses the image model that is already on the drive. A 1 s clip is 124,178–201,768 bytes. The engine also supports larger video models (for example Wan 2.1/2.2 and LTX-Video). They need several GB more on the drive and more than 4 GB of VRAM. We did not test them. <span class="tag t-no">NOT TESTED</span></p>
 
 <h3 id="video-code">How we changed the original code</h3>
-<p>Commit <code>d7d2d2e</code> is the unchanged upstream copy. Commit <code>a788fd6</code> adds the Video feature, and commit <code>7a87554</code> adds the security fixes. Together they add 490 lines and remove 1 line, in 7 files. Of the 490 lines, 463 are in 2 new files. The 5 upstream files have only 27 added lines and 1 removed line. These lines connect the feature to the app.</p>
+<p>Commit <code>d7d2d2e</code> is the unchanged upstream copy. Commit <code>a788fd6</code> adds the Video feature, and commit <code>7a87554</code> adds the security fixes. Together they add 490 lines and remove 1 line, in 7 files. Of the 490 lines, 463 are in 2 new files. The 5 upstream files have only 27 added lines and 1 removed line. These lines connect the feature to the app. Commit <code>52b268d</code> is separate from the Video feature: it adds the request check that the list at the end of this section describes.</p>
 <table>
   <tr><th>File in <code>studio/</code></th><th>Type</th><th>Lines</th><th>Purpose</th></tr>
   <tr><td><code>app/frontend/src/components/VideoGenerator.jsx</code></td><td>New</td><td>+236</td><td>The Video page, and the card in <b>Models → Video</b></td></tr>
@@ -927,11 +928,13 @@ const args = [
   <li><b>Engine choice.</b> A folder with all 3 engines always uses <code>cuda</code>, also on a PC without an NVIDIA card. We expect that to fail, but we did not test it. The Vulkan engine is an older release, <code>master-685-19bdfe2</code>, and we did not check that it has the video options. <span class="tag t-code">FROM CODE</span> <span class="tag t-no">NOT TESTED</span></li>
   <li><b>Base model filter.</b> The list shows image models smaller than 4.5 GB, because SD 1.5 files are about 2 GB and SDXL files are about 7 GB. The code does not read the file header. Other files of those sizes can show incorrectly. <span class="tag t-code">FROM CODE</span></li>
   <li><b>Not tested:</b> 16 frames and 512×512 in the Video tab; Linux, macOS, AMD and Intel graphics cards; Wan and LTX-Video; video offline. <span class="tag t-no">NOT TESTED</span></li>
-  <li><b>Open access from other web pages.</b> The upstream server sets <code>Access-Control-Allow-Origin: *</code>, and its OPTIONS answer allows any origin. Our <code>video.cjs:221</code> sets the same header. The server accepts connections only from this PC (<code>serve.cjs:7707</code>), but a web page that is open in your browser can call the local API while the studio runs, for example to start or delete a video. We did not change this.</li>
+  <li><b>Requests from other web pages: refused.</b> Commit <code>52b268d</code> adds <code>scripts/server/origin-check.cjs</code> (16 lines) and 6 lines in <code>serve.cjs</code>. The server answers 403 if the <code>Origin</code> header is not the studio's own address. The server also answers 403 if the <code>Host</code> header is not <code>localhost</code>, <code>127.0.0.1</code> or <code>[::1]</code>, unless you set <code>UAIS_HOST</code>. A change to the <code>Access-Control-Allow-Origin</code> value alone is not sufficient: it stops a page from reading the answer, but the browser still sends a <code>text/plain</code> POST, and the server does not check the type. The upstream <code>*</code> headers and <code>video.cjs:221</code> stay in the code, but a refused request does not get to them. A request with no <code>Origin</code> passes, for example from the launcher, from <code>curl</code> or from an <code>&lt;img&gt;</code> tag. A page cannot read the answer to an <code>&lt;img&gt;</code> request. We did not check every GET route for side effects. <span class="tag t-ok">TESTED</span></li>
+  <li><b>How we tested the check.</b> In Chrome, a page on <code>http://127.0.0.1:1499</code> got 403 for GET and <code>text/plain</code> POST, and its JSON POST failed at the preflight. The studio page on <code>http://localhost:1420</code> loaded the 0.5B chat model, answered a chat message, made a 256×256 image in 13.4 s (4 steps) and fetched a 124,178-byte clip. With <code>curl</code>, a foreign <code>Origin</code>, <code>Origin: null</code>, another local port and a foreign <code>Host</code> each got 403. A POST through the Vite dev server got 200 with its own <code>Origin</code> and 403 with a foreign one. The 2 repo test files gave 29 passes and 1 failure. That failure, <i>text-to-image sends seed and sampling settings to sdapi</i>, also occurs without this commit: the repo copy does not have the package <code>@tauri-apps/api</code>. Not tested: a page on a public web site, and <code>UAIS_HOST=0.0.0.0</code> with a real second device. <span class="tag t-ok">TESTED</span></li>
+  <li><b>Engine ports: still open.</b> The check is in the studio server only. The engines are separate programs on their own ports. While a model is loaded, the same test page on <code>http://127.0.0.1:1499</code> called both engines directly and read the answers: <code>llama-server</code> on port 10086 (it returned a chat answer and the full path of the model file) and the image engine on port 8080 (it returned images). Such a page can use your graphics card and read the model path. The routes that read saved chats and delete files are in the studio server, not in the engines, but we did not review all engine routes. <code>llama-server</code> has the options <code>--api-key</code> and <code>--cors-origins</code>. The <code>--help</code> text of <code>sd-cuda.exe</code> shows no similar option. We did not change the engines. <span class="tag t-ok">TESTED</span></li>
 </ul>
 
 <footer>
-  Written 1 Nov 2026 (images, speech and voice added the same day) from a full test installation on the laptop named at the top. Screenshots are from that installation. The project changes over time. If your screen does not match, follow the labels on your screen and check the terminal output.
+  Written 1 Nov 2026 (images, speech, voice and video added the same day) from a full test installation on the laptop named at the top. Screenshots are from that installation. The project changes over time. If your screen does not match, follow the labels on your screen and check the terminal output.
 </footer>
 </div>
 
