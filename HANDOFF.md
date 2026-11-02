@@ -3,23 +3,24 @@
 **Read this file first in each new session.** This repo has no project `CLAUDE.md`; the standing rules are in the user's global `CLAUDE.md`.
 If the session starts in the parent folder `usb_local_ai_jarvis`, this file is at `local-studio-usb-ai-demo\HANDOFF.md`.
 
-## Current state (verified 1 Nov 2026, 17:53 local)
+## Current state (verified 1 Nov 2026, 19:00 local, UTC-8)
 
-- Repo: https://github.com/az9713/local-studio-usb-ai-demo (public; GitHub Pages from `main` root, whole branch). Git: branch `main`. The commit that holds this file is the HEAD; before it, `7a87554`.
+- Repo: https://github.com/az9713/local-studio-usb-ai-demo (public; GitHub Pages from `main` root, whole branch). Git: branch `main`. The commit that holds this file is the HEAD.
 - Commits:
   - `0230342`: docs (README, manual, evidence, screenshots, samples).
   - `d7d2d2e`: upstream imported unchanged as `studio/` (techjarves/Portable-Local-Studio, MIT, ZIP of main from 31 Oct 2026; upstream main is now `3f0830f`).
   - `a788fd6`: Video tab.
   - `7a87554`: security fixes in `video.cjs`.
+  - `334ddef`: first refresh of this file. The HEAD commit adds the two manual parts below.
 - Video feature, done (AnimateDiff text-to-video, Windows only; no PR to upstream, by the user's choice):
   - New: `studio/scripts/server/video.cjs` (`/api/video/*`, spawns `app\backend\win\cuda\sd-cli.exe -M vid_gen`) and `studio/app/frontend/src/components/VideoGenerator.jsx` (Video page and the `VideoModels` card).
   - Small edits: `serve.cjs` (+9 lines), `App.jsx`, `Sidebar.jsx`, `ModelManager.jsx`, `.gitignore`.
   - Motion module: `mm_sd15_v3.safetensors`, 836,618,008 bytes, from huggingface.co/conrevo/AnimateDiff-A1111.
   - README section 7.6 has the steps and the measured times.
-- Manual: `local-studio-windows-setup.html` has 23 sections and **no Video section yet**. Two copies exist, byte-identical on 1 Nov (SHA-256 `3AE36907…`): this repo, and the parent folder `usb_local_ai_jarvis`. Pages returned HTTP 200 for it.
-- Private artifact: https://claude.ai/artifact/2QZVQufnXuqSqFS2v6Es9Z, slug `0b634499-197d-40a6-9d3d-a717c8160130`, live version `1793555039-1e26`, read mode `owner`. It also has no Video section.
+- Manual: `local-studio-windows-setup.html` has 23 sections and **no Video section yet**. Step 16 now has the parts `#where-models` and `#self-contained`. Two copies exist, byte-identical on 1 Nov (SHA-256 `88456e54…`): this repo, and the parent folder `usb_local_ai_jarvis`.
+- Private artifact: https://claude.ai/artifact/2QZVQufnXuqSqFS2v6Es9Z, slug `0b634499-197d-40a6-9d3d-a717c8160130`, live version `1793588449-7119`, read mode `owner`. It holds the same manual, so it also has no Video section.
 - Test install: `C:\AI\usb128\Portable-Local-Studio` (about 8.93 GB). It holds the Video edits and a rebuilt `app\dist`. Originals: `C:\AI\*.orig` and `C:\AI\dist.orig`.
-  - On 1 Nov at 17:53, the server was stopped and the `U:` mapping was absent. The agent did not stop them, and the cause is not known. The last boot was at 16:54, so a restart is not the cause.
+  - The server is stopped and the `U:` mapping is absent. The PC restarted at 16:54 on 1 Nov, after the last server check at 15:44. A restart ends the server and removes a `subst` mapping.
   - To start again: run `subst U: C:\AI\usb128`, then start `U:\Portable-Local-Studio\windows.bat`. The port can change (1420, then 1421 in the last run). Read it from the launcher output.
 
 ## Next task
@@ -32,7 +33,7 @@ If the session starts in the parent folder `usb_local_ai_jarvis`, this file is a
 4. Update the `budget`, `results` and `limits` sections and the "One large model at a time" statements: 8,933,067,683 bytes in 11,027 files with video; video unloads the chat or image model.
 5. Copy the result over the parent-folder copy, and compare the two hashes.
 6. Commit and push. Check that the Pages URL returns 200: https://az9713.github.io/local-studio-usb-ai-demo/local-studio-windows-setup.html
-7. Read the artifact `guide` (topic `pages`), then call `publish_files` with the slug and `base_version` `1793555039-1e26`.
+7. Read the artifact `guide` (topic `pages`), then call `publish_files` with the slug and `base_version` `1793588449-7119`.
 
 Acceptance: the section renders on Pages and in the artifact, all 3 images show, and no number differs from README section 7.6.
 
@@ -41,6 +42,10 @@ If the user asks for something else, that takes precedence.
 ## Open decision for the user
 
 - Upstream sets `Access-Control-Allow-Origin: *`, and its OPTIONS preflight allows any origin on all `/api` routes (`serve.cjs`; the server binds 127.0.0.1 at `serve.cjs:7707`). A web page open in the browser can call the local API while the studio runs. Not changed. The user was asked whether to limit it to the studio's own address, and has not answered.
+
+## Known text error
+
+- `README.md:48` says the test "proves the app works from any drive letter". The test ran only from `U:`. The manual is corrected (line 144). The README is not corrected, because the user asked for changes to the HTML docs only.
 
 ## Not tested
 

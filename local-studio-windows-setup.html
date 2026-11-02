@@ -90,7 +90,7 @@
     <li><a href="#jarvis">A "Jarvis" voice loop</a></li>
     <li><a href="#extras">More examples</a></li>
     <li><a href="#budget">Keep everything on the 128 GB drive</a></li>
-    <li><a href="#stop">Stop, restart and move the app</a></li>
+    <li><a href="#stop">Stop, restart and move the app</a>: <a href="#where-models">where the models are</a>, <a href="#self-contained">make a self-contained copy</a></li>
     <li><a href="#offline">Do an offline test</a></li>
     <li><a href="#hardware">AMD, Intel and CPU-only PCs</a></li>
     <li><a href="#gotchas">Windows gotchas and fixes</a></li>
@@ -141,7 +141,7 @@
   <tr><td>File system</td><td>Use <b>NTFS</b> for a Windows-only drive. Use <b>exFAT</b> to share the drive with a Mac or Linux PC. Do not use FAT32: it cannot hold a file larger than about 4 GB, and many models are larger than that.</td></tr>
 </table>
 <div class="warn"><strong>Warning:</strong> Formatting a drive deletes all of its data. Back up the drive first. Before you format, check the drive name and its capacity, not only its letter.</div>
-<p class="note"><b>How the test simulated a 128 GB USB drive:</b> The test laptop had no USB drive connected, so we copied the app to <code>C:\AI\usb128</code>. We then ran <code>subst U: C:\AI\usb128</code> to make that folder appear as drive <code>U:</code>. The app ran only from <code>U:\</code>. This proves that the app works from any drive letter. It does not test USB speed or exFAT. <span class="tag t-ok">TESTED</span></p>
+<p class="note"><b>How the test simulated a 128 GB USB drive:</b> The test laptop had no USB drive connected, so we copied the app to <code>C:\AI\usb128</code>. We then ran <code>subst U: C:\AI\usb128</code> to make that folder appear as drive <code>U:</code>. The app ran only from <code>U:\</code>. We did not test a different drive letter, USB speed or exFAT. <span class="tag t-ok">TESTED</span></p>
 
 <!-- 4 -->
 <h2 id="download">Step <span class="num">4</span>Download and extract the app</h2>
@@ -493,6 +493,47 @@ Do not add any other information.</code></pre>
   <tr><td><code>app\llm-backend</code>, <code>app\backend</code>, <code>app\speech-backend</code>, <code>app\tts-runtime</code></td><td>Engines (3.2 GB of the 4.6 GB on the test laptop)</td></tr>
   <tr><td><code>app\tools</code>, <code>app\dist</code>, <code>app\config</code></td><td>Portable Node.js, the built interface, settings</td></tr>
 </table>
+
+<h3 id="where-models">Where the models are <span class="tag t-ok">TESTED</span></h3>
+<p>The app keeps each model in the project folder, on the drive. The GitHub repo of this manual holds no models and no engines. Setup downloads the engines, and you download the models from inside the app. The paths below are relative to the project folder. In our test, the project folder was <code>C:\AI\usb128\Portable-Local-Studio</code>.</p>
+<table>
+  <tr><th>Use</th><th>Model file</th><th>Folder</th><th>Bytes</th></tr>
+  <tr><td>Chat</td><td><code>qwen2.5-1.5b-instruct-q4_k_m.gguf</code></td><td><code>app\llm-models</code></td><td>1,117,320,736</td></tr>
+  <tr><td>Chat</td><td><code>qwen2.5-coder-0.5b-instruct-q4_k_m.gguf</code></td><td><code>app\llm-models</code></td><td>491,400,064</td></tr>
+  <tr><td>Images (and video base)</td><td><code>DreamShaper_8_pruned.safetensors</code></td><td><code>app\models</code></td><td>2,132,625,894</td></tr>
+  <tr><td>Video motion</td><td><code>mm_sd15_v3.safetensors</code></td><td><code>app\video-models</code></td><td>836,618,008</td></tr>
+  <tr><td>Speech-to-text (Whisper)</td><td><code>ggml-base.en.bin</code></td><td><code>app\speech-models</code></td><td>147,964,211</td></tr>
+  <tr><td>Text-to-speech (Kokoro)</td><td><code>onnx\model_quantized.onnx</code></td><td><code>app\tts-runtime\node_modules\@huggingface\transformers\.cache\onnx-community\Kokoro-82M-v1.0-ONNX</code></td><td>92,361,116</td></tr>
+</table>
+<p class="note">The video motion model is only in the version with the Video tab (repo README, section 7.6). The Kokoro model is inside <code>node_modules</code>. The note in <code>app\tts-models\kokoro-onnx-q8.json</code> says <code>app/tts-cache</code>, but that folder had 0 bytes in our test. If you run <code>npm install</code> again, you can lose the Kokoro model. <span class="tag t-no">NOT TESTED</span></p>
+
+<h3 id="self-contained">Make a self-contained copy</h3>
+<p>After setup and the model downloads, the project folder holds the models, engines, portable Node.js and the interface. You do not need to build a package: copy that folder. Our test copy with the Video tab held 8,933,067,683 bytes in 11,027 files (measured 1 Nov 2026, 14:17). We did not run the procedure below. <span class="tag t-no">NOT TESTED</span></p>
+<div class="caution"><strong>Caution:</strong> Stop the app before you copy. Use NTFS on the drive, because we did not test exFAT.</div>
+<ol class="steps">
+  <li>Connect the USB drive. These steps use <code>E:</code> as its letter.</li>
+  <li>Run <code>robocopy C:\AI\usb128\Portable-Local-Studio E:\Portable-Local-Studio /E</code>. Use your project folder as the first path.</li>
+  <li>Disconnect Wi-Fi, Ethernet and phone tethering.</li>
+  <li>Double-click <code>E:\Portable-Local-Studio\windows.bat</code>.</li>
+  <li>Make one chat answer, one image, one transcript and one voice clip. If you have the Video tab, also make one video.</li>
+</ol>
+<p>To keep the app as one file, run <code>tar -a -c -f E:\Portable-Local-Studio.zip -C C:\AI\usb128 Portable-Local-Studio</code>. <span class="tag t-no">NOT TESTED</span></p>
+
+<h3>Limits of a self-contained copy</h3>
+<ul>
+  <li><b>Windows only.</b> In our copy, <code>app\backend</code> has only a <code>win</code> folder. Linux and macOS need their own setup, online. <span class="tag t-ok">TESTED</span></li>
+  <li><b>Not tested:</b> the offline run (Step 17), a different PC, real USB speed, and a move to a different drive letter after setup. <code>app\config</code> has no fixed drive paths. This is a good sign, but it is not proof. <span class="tag t-no">NOT TESTED</span></li>
+  <li><b>Other graphics cards.</b> Our copy has <code>cuda</code>, <code>vulkan</code> and <code>cpu</code> versions of the image engine, and CUDA, Vulkan and SYCL files for the chat engine. We tested only CUDA, on an NVIDIA card. See section 18. <span class="tag t-no">NOT TESTED</span></li>
+  <li><b>Parts outside the folder.</b> The PC must have its own graphics driver. Setup installs the Visual C++ runtime if it is missing (<code>setup.ps1:213-239</code>), but <code>windows.bat</code> does not start setup when all parts of the folder are present. A PC without that runtime can fail to start the engines. <span class="tag t-code">FROM CODE</span></li>
+</ul>
+
+<h3>If you give the copy to another person</h3>
+<div class="caution"><strong>Caution:</strong> Step 1 deletes your chats and outputs from the copy. Do it on the copy, not on your original folder.</div>
+<ol class="steps">
+  <li>Delete the files in <code>app\chat-history</code>, <code>app\outputs</code>, <code>app\tts-outputs</code>, <code>app\transcriptions</code> and <code>app\video-outputs</code>.</li>
+  <li>Check the licence of each model. We did not check them. This matters if you share the copy publicly.</li>
+</ol>
+<p class="note"><b>Why the GitHub repo does not hold the full app:</b> from memory, GitHub blocks files above 100 MB in a normal repo and limits each release file to 2 GiB. We did not check these limits. DreamShaper 8 alone is 2,132,625,894 bytes. To share the full folder, use a cloud drive or a physical drive.</p>
 
 <!-- 17 -->
 <h2 id="offline">Step <span class="num">17</span>Do an offline test <span class="tag t-no">NOT TESTED</span></h2>
