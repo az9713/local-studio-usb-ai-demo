@@ -90,7 +90,7 @@
     <li><a href="#jarvis">A "Jarvis" voice loop</a></li>
     <li><a href="#extras">More examples</a></li>
     <li><a href="#budget">Keep everything on the 128 GB drive</a></li>
-    <li><a href="#stop">Stop, restart and move the app</a>: <a href="#where-models">where the models are</a>, <a href="#self-contained">make a self-contained copy</a></li>
+    <li><a href="#stop">Stop, restart and move the app</a>: <a href="#where-models">where the models are</a>, <a href="#self-contained">make a self-contained copy</a>, <a href="#another-laptop">run the copy on another laptop</a></li>
     <li><a href="#offline">Do an offline test</a></li>
     <li><a href="#hardware">AMD, Intel and CPU-only PCs</a></li>
     <li><a href="#gotchas">Windows gotchas and fixes</a></li>
@@ -525,6 +525,32 @@ Do not add any other information.</code></pre>
   <li><b>Not tested:</b> the offline run (Step 17), a different PC, real USB speed, and a move to a different drive letter after setup. <code>app\config</code> has no fixed drive paths. This is a good sign, but it is not proof. <span class="tag t-no">NOT TESTED</span></li>
   <li><b>Other graphics cards.</b> Our copy has <code>cuda</code>, <code>vulkan</code> and <code>cpu</code> versions of the image engine, and CUDA, Vulkan and SYCL files for the chat engine. We tested only CUDA, on an NVIDIA card. See section 18. <span class="tag t-no">NOT TESTED</span></li>
   <li><b>Parts outside the folder.</b> The PC must have its own graphics driver. Setup installs the Visual C++ runtime if it is missing (<code>setup.ps1:213-239</code>), but <code>windows.bat</code> does not start setup when all parts of the folder are present. A PC without that runtime can fail to start the engines. <span class="tag t-code">FROM CODE</span></li>
+</ul>
+
+<h3 id="another-laptop">Run a copy on another Windows laptop <span class="tag t-no">NOT TESTED</span></h3>
+<p>This part is for a copy of the full folder (in our test, <code>C:\AI\usb128</code>) on a USB drive, used on another Windows laptop with the same hardware. We expect it to work, but we did not test it. We ran the app only on the test laptop, from <code>U:</code>, with internet available. The same hardware removes the largest risk, a different graphics card. These requirements remain:</p>
+<table>
+  <tr><th>Requirement</th><th>What must be true on the other laptop</th><th>If it is not true</th></tr>
+  <tr><td>Visual C++ runtime <span class="tag t-code">FROM CODE</span></td><td>It must already be installed. <code>windows.bat</code> does not check for it, and only <code>setup.ps1</code> installs it.</td><td>The engines can fail to start.</td></tr>
+  <tr><td>NVIDIA driver</td><td>It must be installed and working. The same hardware does not include the driver.</td><td>The engines that use the graphics card can fail. The Video tab depends on CUDA.</td></tr>
+  <tr><td>A different drive letter</td><td>The app must not depend on <code>U:</code>. <code>app\config</code> has no fixed drive paths, but we did not check every other file.</td><td>Part of the app can fail.</td></tr>
+  <tr><td>USB speed</td><td>The drive must be fast enough. We measured only the internal SSD.</td><td>Models load and run more slowly. We expect the app to still work.</td></tr>
+  <tr><td>File system</td><td>Format the drive as NTFS, because we did not test exFAT.</td><td>The result on exFAT is not known.</td></tr>
+</table>
+<div class="warn"><strong>Warning:</strong> Step 1 deletes all data on the USB drive. Keep the original folder until the test in step 6 passes.</div>
+<ol class="steps">
+  <li>Format the USB drive as NTFS.</li>
+  <li>Run <code>robocopy C:\AI\usb128 E:\usb128 /E</code>, where <code>E:</code> is the USB drive.</li>
+  <li>Connect the drive to the other laptop.</li>
+  <li>Disconnect that laptop from the internet.</li>
+  <li>Double-click <code>usb128\Portable-Local-Studio\windows.bat</code> on the USB drive.</li>
+  <li>Make one chat answer, one image, one transcript, one voice clip and one video.</li>
+</ol>
+<p>If all 5 outputs work, the copy works on that laptop. A pass does not prove that it will work on another PC, or after a later Windows or driver change.</p>
+<ul>
+  <li><b>Ports:</b> <code>windows.bat</code> force-closes every program that uses port 8080 or port 10086 on the other laptop. Stop those programs first if they matter. <span class="tag t-code">FROM CODE</span></li>
+  <li><b>Private data:</b> the copy includes the chats and outputs of the original. Delete them first if another person uses that laptop (see below).</li>
+  <li><b>If the test fails:</b> read the error text in the launcher window. If you can connect that laptop to the internet, <code>setup.ps1</code> can install a missing Visual C++ runtime. <span class="tag t-code">FROM CODE</span></li>
 </ul>
 
 <h3>If you give the copy to another person</h3>

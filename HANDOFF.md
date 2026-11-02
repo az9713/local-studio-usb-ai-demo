@@ -17,8 +17,8 @@ If the session starts in the parent folder `usb_local_ai_jarvis`, this file is a
   - Small edits: `serve.cjs` (+9 lines), `App.jsx`, `Sidebar.jsx`, `ModelManager.jsx`, `.gitignore`.
   - Motion module: `mm_sd15_v3.safetensors`, 836,618,008 bytes, from huggingface.co/conrevo/AnimateDiff-A1111.
   - README section 7.6 has the steps and the measured times.
-- Manual: `local-studio-windows-setup.html` has 23 sections and **no Video section yet**. Step 16 now has the parts `#where-models` and `#self-contained`. Two copies exist, byte-identical on 1 Nov (SHA-256 `88456e54…`): this repo, and the parent folder `usb_local_ai_jarvis`.
-- Private artifact: https://claude.ai/artifact/2QZVQufnXuqSqFS2v6Es9Z, slug `0b634499-197d-40a6-9d3d-a717c8160130`, live version `1793588449-7119`, read mode `owner`. It holds the same manual, so it also has no Video section.
+- Manual: `local-studio-windows-setup.html` has 23 sections and **no Video section yet**. Step 16 now has the parts `#where-models`, `#self-contained` and `#another-laptop`. Two copies exist, byte-identical on 1 Nov (SHA-256 `845a2479…`): this repo, and the parent folder `usb_local_ai_jarvis`.
+- Private artifact: https://claude.ai/artifact/2QZVQufnXuqSqFS2v6Es9Z, slug `0b634499-197d-40a6-9d3d-a717c8160130`, live version `1793591003-3777`, read mode `owner`. It holds the same manual, so it also has no Video section.
 - Test install: `C:\AI\usb128\Portable-Local-Studio` (about 8.93 GB). It holds the Video edits and a rebuilt `app\dist`. Originals: `C:\AI\*.orig` and `C:\AI\dist.orig`.
   - The server is stopped and the `U:` mapping is absent. The PC restarted at 16:54 on 1 Nov, after the last server check at 15:44. A restart ends the server and removes a `subst` mapping.
   - To start again: run `subst U: C:\AI\usb128`, then start `U:\Portable-Local-Studio\windows.bat`. The port can change (1420, then 1421 in the last run). Read it from the launcher output.
@@ -33,7 +33,7 @@ If the session starts in the parent folder `usb_local_ai_jarvis`, this file is a
 4. Update the `budget`, `results` and `limits` sections and the "One large model at a time" statements: 8,933,067,683 bytes in 11,027 files with video; video unloads the chat or image model.
 5. Copy the result over the parent-folder copy, and compare the two hashes.
 6. Commit and push. Check that the Pages URL returns 200: https://az9713.github.io/local-studio-usb-ai-demo/local-studio-windows-setup.html
-7. Read the artifact `guide` (topic `pages`), then call `publish_files` with the slug and `base_version` `1793588449-7119`.
+7. Read the artifact `guide` (topic `pages`), then call `publish_files` with the slug and `base_version` `1793591003-3777`.
 
 Acceptance: the section renders on Pages and in the artifact, all 3 images show, and no number differs from README section 7.6.
 
