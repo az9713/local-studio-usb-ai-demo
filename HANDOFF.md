@@ -11,31 +11,27 @@ If the session starts in the parent folder `usb_local_ai_jarvis`, this file is a
   - `d7d2d2e`: upstream imported unchanged as `studio/` (techjarves/Portable-Local-Studio, MIT, ZIP of main from 31 Oct 2026; upstream main is now `3f0830f`).
   - `a788fd6`: Video tab.
   - `7a87554`: security fixes in `video.cjs`.
-  - `334ddef`: first refresh of this file. The HEAD commit adds the two manual parts below.
+  - `334ddef`: first refresh of this file. Later commits add the manual parts below; `e638bda` adds section 24.
 - Video feature, done (AnimateDiff text-to-video, Windows only; no PR to upstream, by the user's choice):
-  - New: `studio/scripts/server/video.cjs` (`/api/video/*`, spawns `app\backend\win\cuda\sd-cli.exe -M vid_gen`) and `studio/app/frontend/src/components/VideoGenerator.jsx` (Video page and the `VideoModels` card).
+  - New: `studio/scripts/server/video.cjs` (`/api/video/*`, spawns the first `sd-cli.exe` found in `app\backend\win\{cuda,vulkan,cpu}` with `-M vid_gen`) and `studio/app/frontend/src/components/VideoGenerator.jsx` (Video page and the `VideoModels` card).
   - Small edits: `serve.cjs` (+9 lines), `App.jsx`, `Sidebar.jsx`, `ModelManager.jsx`, `.gitignore`.
   - Motion module: `mm_sd15_v3.safetensors`, 836,618,008 bytes, from huggingface.co/conrevo/AnimateDiff-A1111.
   - README section 7.6 has the steps and the measured times.
-- Manual: `local-studio-windows-setup.html` has 23 sections and **no Video section yet**. Step 16 now has the parts `#where-models`, `#self-contained` and `#another-laptop`. Two copies exist, byte-identical on 1 Nov (SHA-256 `845a2479…`): this repo, and the parent folder `usb_local_ai_jarvis`.
-- Private artifact: https://claude.ai/artifact/2QZVQufnXuqSqFS2v6Es9Z, slug `0b634499-197d-40a6-9d3d-a717c8160130`, live version `1793591003-3777`, read mode `owner`. It holds the same manual, so it also has no Video section.
+- Manual: `local-studio-windows-setup.html` has 24 sections. Section 24 (`#video`) has the Video steps, the results, 2 embedded clips and the code changes. Step 16 has the parts `#where-models`, `#self-contained` and `#another-laptop`. Two copies exist, byte-identical on 1 Nov (SHA-256 `51dc32fb…`, about 2.32 MB): this repo, and the parent folder `usb_local_ai_jarvis`.
+- Private artifact: https://claude.ai/artifact/2QZVQufnXuqSqFS2v6Es9Z, slug `0b634499-197d-40a6-9d3d-a717c8160130`, live version `1793591941-9bf1`, read mode `owner`. It holds the same manual.
 - Test install: `C:\AI\usb128\Portable-Local-Studio` (about 8.93 GB). It holds the Video edits and a rebuilt `app\dist`. Originals: `C:\AI\*.orig` and `C:\AI\dist.orig`.
   - The server is stopped and the `U:` mapping is absent. The PC restarted at 16:54 on 1 Nov, after the last server check at 15:44. A restart ends the server and removes a `subst` mapping.
   - To start again: run `subst U: C:\AI\usb128`, then start `U:\Portable-Local-Studio\windows.bat`. The port can change (1420, then 1421 in the last run). Read it from the launcher output.
 
 ## Next task
 
-**Add a Video section to the HTML manual, then republish.** The server is not necessary for this task. Use only the measured data in README section 7.6.
+No task is assigned. These are the open items, in the recommended order:
 
-1. Edit `local-studio-windows-setup.html` directly. The file is about 1.58 MB because the images are base64 data, so use Grep to find `id="..."`, and read only line ranges.
-2. Add `<h2 id="video">` after the `image` section or the `jarvis` section (line 374), and add the link to the table of contents (lines 90–91 show the format).
-3. Embed `screenshots/video-models.jpeg`, `video-unload.jpeg` and `video.jpeg` as base64. The artifact is one file, so relative links do not work there.
-4. Update the `budget`, `results` and `limits` sections and the "One large model at a time" statements: 8,933,067,683 bytes in 11,027 files with video; video unloads the chat or image model.
-5. Copy the result over the parent-folder copy, and compare the two hashes.
-6. Commit and push. Check that the Pages URL returns 200: https://az9713.github.io/local-studio-usb-ai-demo/local-studio-windows-setup.html
-7. Read the artifact `guide` (topic `pages`), then call `publish_files` with the slug and `base_version` `1793591003-3777`.
+1. Run the test in the manual, Step 16, `#another-laptop`, on a real USB drive. Only the user can do this. It is the largest open risk for the "self-contained" statement.
+2. Correct `README.md:48` if the user agrees (see "Known text error").
+3. Get the user's decision on the open access (see "Open decision").
 
-Acceptance: the section renders on Pages and in the artifact, all 3 images show, and no number differs from README section 7.6.
+To edit the manual: use Python with exact-match replacements, then copy the file to the parent folder and compare the hashes. Do not use `sed` on it: a regex over the base64 lines took more than 60 s. Republish with `publish_files`, slug above, `base_version` from this file (read the artifact `guide`, topic `pages`, first).
 
 If the user asks for something else, that takes precedence.
 
