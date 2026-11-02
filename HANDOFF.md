@@ -28,16 +28,15 @@ If the session starts in the parent folder `usb_local_ai_jarvis`, this file is a
 
 No task is assigned. These are the open items, in the recommended order:
 
-1. Run the test in the manual, Step 16, `#another-laptop`, on a real USB drive. Only the user can do this. It is the largest open risk for the "self-contained" statement.
-2. Get the user's decision on the engine ports (see "Open decision").
+1. Run the test in the manual, Step 16, `#another-laptop`, on a real USB drive. Only the user can do this. On 1 Nov no USB drive was connected, so nothing is copied yet. Copy only `C:\AI\usb128` (8,933,069,916 bytes, 11,028 files), not the logs, `*.orig`, `dist.orig` or `*.pid` files in `C:\AI`. It is the largest open risk for the "self-contained" statement.
 
 To edit the manual: use Python with exact-match replacements, then copy the file to the parent folder and compare the hashes. Do not use `sed` on it: a regex over the base64 lines took more than 60 s. Republish with `publish_files`, slug above, `base_version` from this file (read the artifact `guide`, topic `pages`, first).
 
 If the user asks for something else, that takes precedence.
 
-## Open decision for the user
+## Decision by the user: engine ports stay open
 
-- The studio server now refuses other web pages (`origin-check.cjs`, 403). The engines are separate programs and are still open. While a model is loaded, a page on `http://127.0.0.1:1499` called `llama-server` on port 10086 and the image engine on port 8080 directly and read the answers, including the full model path. `llama-server` has `--api-key` and `--cors-origins`. The `--help` text of `sd-cuda.exe` shows no similar option. Not changed. The user has not decided.
+- The studio server now refuses other web pages (`origin-check.cjs`, 403). The engines are separate programs and are still open. While a model is loaded, a page on `http://127.0.0.1:1499` called `llama-server` on port 10086 and the image engine on port 8080 directly and read the answers, including the full model path. `llama-server` has `--api-key` and `--cors-origins`. The `--help` text of `sd-cuda.exe` shows no similar option. The user decided on 1 Nov to leave the engines as they are.
 - The upstream `Access-Control-Allow-Origin: *` headers stay in the code, because a refused request does not get to them.
 
 ## Not tested
